@@ -1,15 +1,34 @@
+// Load environment variables from .env file into process.env
 require('dotenv').config();
+
+// Import database connection configuration
 const dbConnection = require('./config/database');
 
+// Initialize Express application
 const app = require('express')();
 
-dbConnection().then(() => {
-
+/**
+ * Establishes database connection and initializes the Express server
+ * @async
+ * @function
+ */
+dbConnection()
+  .then(() => {
+    // Configure Express middleware
     require('./config/express')(app);
 
+    // Set up application routes
     require('./config/routes')(app);
 
-    app.listen(process.env.PORT, console.log(`Listening on port ${process.env.PORT}!`));
-    console.log('Connected to MongoDB');
+    // Start the server and listen on the specified port
+    app.listen(process.env.PORT, () => {
+      console.log(`Listening on port ${process.env.PORT}!`);
+    });
 
-}).catch(console.error);
+    // Log successful database connection
+    console.log('Connected to MongoDB');
+  })
+  .catch((error) => {
+    // Log any errors that occur during database connection
+    console.error('Database connection error:', error);
+  });
