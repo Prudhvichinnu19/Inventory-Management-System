@@ -29,6 +29,5 @@ dbConnection()
     console.log('Connected to MongoDB');
   })
   .catch((error) => {
-    // Log any errors that occur during database connection
     console.error('Database connection error:', error);
   });
